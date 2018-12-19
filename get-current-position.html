@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>geolocation.getCurrentPosition demo</title>
+</head>
+<body>
+<div id="output"></div>
+<script>
+let output = document.getElementById('output');
+
+function onSuccess(position) {
+  console.log(position);
+  output.innerHTML = `
+<pre>
+  latitude: ${position.coords.latitude}
+  longitude: ${position.coords.longitude}
+  altitude: ${position.coords.altitude}
+  accuracy: ${position.coords.accuracy}
+  altitudeAccuracy: ${position.coords.altitudeAccuracy}
+  heading: ${position.coords.heading}
+  speed: ${position.coords.speed}
+  timestamp: ${position.timestamp}
+</pre>
+`;
+}
+
+function onError(error) {
+output.innerHTML =
+    `<span style="color: red">Error: </span>${error.message} (${error.code})`;
+}
+
+options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+}
+function getPositionLoop() {
+  setTimeout(function () {
+    navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+    getPositionLoop();
+  }, 1000);
+}
+
+getPositionLoop();
+
+</script>
+</body>
+</html>
