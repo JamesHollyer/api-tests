@@ -1,46 +1,62 @@
-<html>
-<head>
+<!-- saved from url=(0066)https://jameshollyer.github.io/api-tests/get-current-position.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>geolocation.getCurrentPosition demo</title>
 </head>
 <body>
-<div id="output"></div>
-<script>
-let output = document.getElementById('output');
+  <div id="settings">
+    Maximum age: <input type="text" id="maximumAge" onchange="onMaxAgeChange()"/>
+  </div>
+  <div id="output">
+  <pre>waiting for getCurrentPosition response</pre>
+  </div>
+  <script>
+    let maximumAgeInput = document.getElementById('maximumAge');
+    let output = document.getElementById('output');
 
-function onSuccess(position) {
-  output.innerHTML = `
-<pre>
-  latitude: ${position.coords.latitude}
-  longitude: ${position.coords.longitude}
-  altitude: ${position.coords.altitude}
-  accuracy: ${position.coords.accuracy}
-  altitudeAccuracy: ${position.coords.altitudeAccuracy}
-  heading: ${position.coords.heading}
-  speed: ${position.coords.speed}
-  timestamp: ${position.timestamp}
-</pre>
-`;
-}
+    function onMaxAgeChange() {
+      let test = parseInt(maximumAgeInput.value);
+      if(test){
+        options.maximumAge = test;
+      }
+    }
 
-function onError(error) {
-output.innerHTML =
-    `<span style="color: red">Error: </span>${error.message} (${error.code})`;
-}
+    function onSuccess(position) {
+      console.log(position);
+      output.innerHTML = `
+    <pre>
+      latitude: ${position.coords.latitude}
+      longitude: ${position.coords.longitude}
+      altitude: ${position.coords.altitude}
+      accuracy: ${position.coords.accuracy}
+      altitudeAccuracy: ${position.coords.altitudeAccuracy}
+      heading: ${position.coords.heading}
+      speed: ${position.coords.speed}
+      timestamp: ${position.timestamp}
+    </pre>
+    `;
+    }
 
-options = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0
-}
-function getPositionLoop() {
-  setTimeout(function () {
-    navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+    function onError(error) {
+      console.warn(error);
+    output.innerHTML =
+        `<span style="color: red">Error: </span>${error.message} (${error.code})`;
+    }
+
+    options = {
+      enableHighAccuracy: true,
+      timeout: 2000,
+      maximumAge: 0
+    }
+    function getPositionLoop() {
+      setTimeout(function () {
+        console.log("getCurrentPosition with these options", options);
+        navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+        getPositionLoop();
+      }, 4000);
+    }
+
     getPositionLoop();
-  }, 1000);
-}
+  </script>
 
-getPositionLoop();
 
-</script>
-</body>
-</html>
+</body></html>
