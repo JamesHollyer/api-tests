@@ -38,7 +38,7 @@
 
     function onError(error) {
       console.warn(error);
-    output.innerHTML =
+      output.innerHTML =
         `<span style="color: red">Error: </span>${error.message} (${error.code})`;
     }
 
@@ -47,6 +47,13 @@
       timeout: 2000,
       maximumAge: 0
     }
+    
+    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        if(key == "maxAge") {
+          options.maximumAge = value;
+        }
+    });
+
     function getPositionLoop() {
       setTimeout(function () {
         console.log("getCurrentPosition with these options", options);
