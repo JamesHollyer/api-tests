@@ -44,10 +44,10 @@
 
     options = {
       enableHighAccuracy: true,
-      timeout: 2000,
+      timeout: 20000,
       maximumAge: 0
     }
-    
+
     window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
         if(key == "maxAge") {
           options.maximumAge = value;
